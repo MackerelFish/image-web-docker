@@ -50,7 +50,7 @@ async def get_image_data(request: Request):
         return reponse(data={'msg':_msg},code=500,message="error")
 
 def image_to_base64():
-    folder_path = ".\\images\\"
+    folder_path = "./images/"
     # 获取文件夹内所有图片文件
     img_extensions = ('.png', '.jpg', '.jpeg', '.bmp', '.gif')
     images = [f for f in os.listdir(folder_path) 
