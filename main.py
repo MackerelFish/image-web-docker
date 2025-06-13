@@ -33,8 +33,8 @@ r_logger = new_logger('REDIRECT', False)
 async def root(request: Request):
     client_ip = get_client_ip(request)
     _url = f'{client_ip}'
-    r_logger.info(f'Client:{_url} Redirecting To /HITOKOTO')
-    return RedirectResponse(url="/HITOKOTO")
+    r_logger.info(f'Client:{_url} Redirecting To /IMAGE')
+    return RedirectResponse(url="/IMAGE")
 
 @app.get("/IMAGE", response_class=JSONResponse)
 async def get_image_data(request: Request, data:str="json"):
