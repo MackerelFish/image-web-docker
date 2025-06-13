@@ -43,6 +43,8 @@ async def get_image_data(request: Request):
     logger.info(f'Client:{_url} GET Request /IMAGE')
     image_data = image_to_base64()
     if image_data is not None:
+        if isinstance(image_data, set):
+            image_data = list(image_data)
         return reponse(data=image_data,code=200,message="success")
     else:
         _msg = "未读取到本地图片，请检查图片文件夹"
