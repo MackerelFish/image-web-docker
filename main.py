@@ -37,7 +37,7 @@ async def root(request: Request):
     return RedirectResponse(url="/IMAGE")
 
 @app.get("/IMAGE", response_class=JSONResponse)
-async def get_image_data(request: Request, data:str="json"):
+async def get_image_data(request: Request):
     client_ip = get_client_ip(request)
     _url = f'{client_ip}'
     logger.info(f'Client:{_url} GET Request /IMAGE')
