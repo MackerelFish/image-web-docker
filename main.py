@@ -67,7 +67,7 @@ def image_to_base64():
     
     # 转换为base64
     with open(img_path, "rb") as img_file:
-        base64_str = base64.b64encode(img_file.read()).decode('utf-8')
+        base64_str = f"base64://{base64.b64encode(img_file.read()).decode('utf-8')}"
     logger.info(f"已读取：{img_file}")
     return {base64_str}
 
