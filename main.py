@@ -47,22 +47,27 @@ async def get_image_data(request: Request,subfolder:str=None):
         return reponse(data={'msg':_msg},code=500,message="error")
     else:
         image_data = image_to_base64(subfolder)
-        if image_data is not None:
-            return reponse(data=image_data,code=200,message="success")
-        else:
-            _msg = f"未读取到本地图片，请检查{subfolder}文件夹"
+        if image_data['code'] == "success":
+            return reponse(data=image_data['data'],code=200,message=image_data['code'])
+        elif image_data['code'] == "error":
+            _msg = image_data['msg']
             logger.error(_msg)
-            return reponse(data={'msg':_msg},code=500,message="error")
+            return reponse(data={'msg':_msg},code=500,message=image_data['code'])
+        else:
+            return reponse(data={'msg':'服务器未知错误'},code=500,message="error")
 
 def image_to_base64(subfolder):
     folder_path = f"./images/{subfolder}"
     # 获取文件夹内所有图片文件
-    img_extensions = ('.png', '.jpg', '.jpeg', '.bmp', '.gif')
-    images = [f for f in os.listdir(folder_path) 
-             if f.lower().endswith(img_extensions)]
-    
+    try:
+        img_extensions = ('.png', '.jpg', '.jpeg', '.bmp', '.gif')
+        images = [f for f in os.listdir(folder_path) 
+                if f.lower().endswith(img_extensions)]
+    except Exception as e:
+        return {"code":"error","msg":f"{subfolder}文件夹不存在，{e}","data":None}
+
     if not images:
-        return None
+        return {"code":"error","msg":f"未读取到本地图片，请检查{subfolder}文件夹","data":None}
     
     # 随机选择一张图片
     selected_img = random.choice(images)
@@ -72,7 +77,7 @@ def image_to_base64(subfolder):
     with open(img_path, "rb") as img_file:
         base64_str = f"base64://{base64.b64encode(img_file.read()).decode('utf-8')}"
     logger.info(f"已读取：{img_path}")
-    return base64_str
+    return {"code":"success","msg":"success","data":base64_str}
 
 def get_client_ip(request: Request):
     x_forwarded_for = request.headers.get("x-forwarded-for")
