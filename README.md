@@ -24,7 +24,7 @@ docker run -d \
 mackerelfish/image-web:latest
 ```
 3. 使用接口为 http://host:11455/IMAGE ，替换host为宿主机内网ip地址
-4. 在宿主机.../images/底下创建分类子文件夹，get参数名为subfolder，参数值为自定义的子文件夹名
+4. 在宿主机.../images/底下创建分类子文件夹，get请求参数名为subfolder，参数值为自定义的子文件夹名
 
 ## 调用方法
 `GET`
@@ -38,7 +38,7 @@ subfolder|string|图片分类子文件夹
 参数值|含义
 -|-
 -|传递子文件夹名称
-空or未匹配参数|默认返回 JSON 格式数据
+空or未匹配参数|无返回数据
 
 ## 返回base64格式图片数据
 
