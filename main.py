@@ -37,12 +37,11 @@ async def root(request: Request):
     return RedirectResponse(url="/IMAGE")
 
 @app.get("/IMAGE", response_class=JSONResponse)
-async def get_image_data(request: Request,data:dict={}):
+async def get_image_data(request: Request,subfolder:str):
     client_ip = get_client_ip(request)
     _url = f'{client_ip}'
     logger.info(f'Client:{_url} GET Request /IMAGE')
-    if data:
-        subfolder = data['subfolder']
+    if subfolder:
         image_data = image_to_base64(subfolder)
         if image_data is not None:
             return reponse(data=image_data,code=200,message="success")
