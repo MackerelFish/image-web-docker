@@ -42,6 +42,10 @@ async def get_image_data(request: Request,subfolder:str=None):
     _url = f'{client_ip}'
     logger.info(f'Client:{_url} GET Request /IMAGE?subfolder={subfolder}')
     if not subfolder or not subfolder.strip():
+        _msg = "未指定文件夹，请检查api参数"
+        logger.error(_msg)
+        return reponse(data={'msg':_msg},code=500,message="error")
+    else:
         image_data = image_to_base64(subfolder)
         if image_data is not None:
             return reponse(data=image_data,code=200,message="success")
@@ -49,10 +53,6 @@ async def get_image_data(request: Request,subfolder:str=None):
             _msg = "未读取到本地图片，请检查图片文件夹"
             logger.error(_msg)
             return reponse(data={'msg':_msg},code=500,message="error")
-    else:
-        _msg = "未指定文件夹，请检查api参数"
-        logger.error(_msg)
-        return reponse(data={'msg':_msg},code=500,message="error")
 
 def image_to_base64(subfolder):
     folder_path = f"./images/{subfolder}"
