@@ -37,22 +37,26 @@ async def root(request: Request):
     return RedirectResponse(url="/IMAGE")
 
 @app.get("/IMAGE", response_class=JSONResponse)
-async def get_image_data(request: Request):
+async def get_image_data(request: Request,data:dict={}):
     client_ip = get_client_ip(request)
     _url = f'{client_ip}'
     logger.info(f'Client:{_url} GET Request /IMAGE')
-    image_data = image_to_base64()
-    if image_data is not None:
-        if isinstance(image_data, set):
-            image_data = list(image_data)
-        return reponse(data=image_data,code=200,message="success")
+    if data:
+        subfolder = data['subfolder']
+        image_data = image_to_base64(subfolder)
+        if image_data is not None:
+            return reponse(data=image_data,code=200,message="success")
+        else:
+            _msg = "未读取到本地图片，请检查图片文件夹"
+            logger.error(_msg)
+            return reponse(data={'msg':_msg},code=500,message="error")
     else:
-        _msg = "未读取到本地图片，请检查图片文件夹"
+        _msg = "未指定文件夹，请检查api参数"
         logger.error(_msg)
         return reponse(data={'msg':_msg},code=500,message="error")
 
-def image_to_base64():
-    folder_path = "./images/"
+def image_to_base64(subfolder):
+    folder_path = f"./images/{subfolder}"
     # 获取文件夹内所有图片文件
     img_extensions = ('.png', '.jpg', '.jpeg', '.bmp', '.gif')
     images = [f for f in os.listdir(folder_path) 
@@ -68,8 +72,8 @@ def image_to_base64():
     # 转换为base64
     with open(img_path, "rb") as img_file:
         base64_str = f"base64://{base64.b64encode(img_file.read()).decode('utf-8')}"
-    logger.info(f"已读取：{img_file}")
-    return {base64_str}
+    logger.info(f"已读取：{img_path}")
+    return base64_str
 
 def get_client_ip(request: Request):
     x_forwarded_for = request.headers.get("x-forwarded-for")
