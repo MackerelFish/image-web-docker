@@ -40,7 +40,7 @@ async def root(request: Request):
 async def get_image_data(request: Request,subfolder:str=None):
     client_ip = get_client_ip(request)
     _url = f'{client_ip}'
-    logger.info(f'Client:{_url} GET Request /IMAGE')
+    logger.info(f'Client:{_url} GET Request /IMAGE?subfolder={subfolder}')
     if not subfolder or not subfolder.strip():
         image_data = image_to_base64(subfolder)
         if image_data is not None:
