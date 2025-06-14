@@ -46,7 +46,7 @@ async def get_image_data(request: Request,subfolder:str=None):
         logger.error(_msg)
         return reponse(data={'msg':_msg},code=500,message="error")
     else:
-        image_data = image_to_base64(subfolder)
+        image_data = await image_to_base64(subfolder)
         if image_data['code'] == "success":
             return reponse(data=image_data['data'],code=200,message=image_data['code'])
         elif image_data['code'] == "error":
@@ -56,7 +56,7 @@ async def get_image_data(request: Request,subfolder:str=None):
         else:
             return reponse(data={'msg':'服务器未知错误'},code=500,message="error")
 
-def image_to_base64(subfolder):
+async def image_to_base64(subfolder):
     folder_path = f"./images/{subfolder}"
     # 获取文件夹内所有图片文件
     try:
