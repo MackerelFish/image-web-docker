@@ -50,7 +50,7 @@ async def get_image_data(request: Request,subfolder:str=None):
         if image_data is not None:
             return reponse(data=image_data,code=200,message="success")
         else:
-            _msg = "未读取到本地图片，请检查图片文件夹"
+            _msg = f"未读取到本地图片，请检查{subfolder}文件夹"
             logger.error(_msg)
             return reponse(data={'msg':_msg},code=500,message="error")
 
