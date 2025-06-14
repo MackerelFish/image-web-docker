@@ -23,11 +23,22 @@ docker run -d \
 --restart=always \
 mackerelfish/image-web:latest
 ```
-3. 使用接口为 http://host:11455/HITOKOTO ，替换host为宿主机内网ip地址
-4. 建议一种分类图片单独使用一个容器，多开容器自行命名容器，替换外部端口映射和外部文件夹映射
+3. 使用接口为 http://host:11455/IMAGE ，替换host为宿主机内网ip地址
+4. 在宿主机.../images/底下创建分类子文件夹，get参数名为subfolder，参数值为自定义的子文件夹名
 
 ## 调用方法
 `GET`
+## 参数说明
+参数名|类型|含义
+-|-|-
+subfolder|string|图片分类子文件夹
+空or未匹配参数|null|无返回数据
+
+### 数据格式说明
+参数值|含义
+-|-
+-|传递子文件夹名称
+空or未匹配参数|默认返回 JSON 格式数据
 
 ## 返回base64格式图片数据
 
@@ -36,6 +47,6 @@ mackerelfish/image-web:latest
 {
     "code":200,
     "message":"success",
-    "data":{"base64://****"}
+    "data":"base64://****"
 }
 ```
