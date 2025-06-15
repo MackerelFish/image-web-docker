@@ -63,6 +63,8 @@ async def get_image_data(request: Request,subfolder:str=None):
                 headers={"X-Error-Detail": "custom-file-not-found"}
             )
         else:
+            _msg = '服务器未知错误'
+            logger.error(_msg)
             raise HTTPException(
                 status_code=500,
                 detail='服务器未知错误',
