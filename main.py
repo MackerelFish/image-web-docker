@@ -1,5 +1,5 @@
 # 导入FastAPI类
-from fastapi import FastAPI,status,Request
+from fastapi import FastAPI,status,Request, HTTPException
 from fastapi.responses import JSONResponse, Response, RedirectResponse
 import base64
 from typing import Union
@@ -52,9 +52,19 @@ async def get_image_data(request: Request,subfolder:str=None):
         elif image_data['code'] == "error":
             _msg = image_data['msg']
             logger.error(_msg)
-            return reponse(data={'msg':_msg},code=500,message=image_data['code'])
+            raise HTTPException(
+                status_code=500,
+                detail=_msg,
+                headers={"X-Error-Detail": "custom-file-not-found"}
+            )
         else:
-            return reponse(data={'msg':'服务器未知错误'},code=500,message="error")
+            _msg = '服务器未知错误'
+            logger.error(_msg)
+            raise HTTPException(
+                status_code=500,
+                detail='服务器未知错误',
+                headers={"X-Error-Detail": "custom-file-not-found"}
+            )
 
 async def image_to_base64(subfolder):
     folder_path = f"./images/{subfolder}"
